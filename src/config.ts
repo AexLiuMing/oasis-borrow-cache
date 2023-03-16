@@ -2,6 +2,7 @@ import { config as mainConfig } from './config.mainnet';
 import { config as kovanConfig } from './config.kovan';
 import { config as localConfig } from './config.localnet';
 import { config as goerliConfig } from './config.goerli';
+import { config as testChainConfig } from './config.testchain';
 import { MessageNames, MessageTypes, sendMessage } from './utils/awsQueue';
 
 const config = (() => {
@@ -14,6 +15,8 @@ const config = (() => {
       return kovanConfig;
     case 'goerli':
       return goerliConfig;
+    case 'testchain':
+      return testChainConfig;
     default:
       throw new Error(
         `Please select network from (mainnet, goerli, kovan, localnet). Was ${process.env.VL_CHAIN_NAME}`,
