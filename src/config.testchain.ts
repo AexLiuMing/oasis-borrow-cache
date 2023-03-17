@@ -244,7 +244,7 @@ export const config: UserProvidedSpockConfig = {
         //     multiplyProxyActionsAddress: [...multiply, ...guni],
         //     exchangeAddress: [...exchange],
         // }),
-        // eventEnhancerGasPrice(vat, cdpManagers),
+        eventEnhancerGasPrice(vat, cdpManagers),
     ],
     migrations: {
         borrow: join(__dirname, './borrow/migrations'),

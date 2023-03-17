@@ -137,7 +137,7 @@ export const eventEnhancerGasPrice: (
     transformerDependencies: [
       getVatCombineTransformerName(vat),
       ...managers.map(getOpenCdpTransformerName),
-      multiplyHistoryTransformerName,
+      // multiplyHistoryTransformerName,
     ],
     startingBlock: vat.startingBlock,
     transform: async (services, _logs) => {
