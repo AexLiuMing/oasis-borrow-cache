@@ -48,7 +48,7 @@ import { multiplyHistoryTransformer } from './borrow/transformers/multiplyHistor
 import { initializeCommandAliases } from './utils';
 import { automationBotTransformer } from './borrow/transformers/automationBotTransformer';
 
-const testChainAddresses = require('./addresses/mainnet.json');
+const testChainAddresses = require('./addresses/testchain.json');
 
 const GENESIS = Number(process.env.GENESIS) || 1;
 
@@ -57,12 +57,12 @@ const vat = {
     startingBlock: GENESIS,
 };
 
-// const cdpManagers = [
-//     {
-//         address: testChainAddresses.MCD_CDP_MANAGER,
-//         startingBlock: GENESIS,
-//     },
-// ];
+const cdpManagers = [
+    {
+        address: testChainAddresses.CDP_MANAGER,
+        startingBlock: GENESIS,
+    },
+];
 
 const cats = [
     {
@@ -192,7 +192,7 @@ const oraclesTransformers = oracles.map(getOracleTransformerName);
 export const config: UserProvidedSpockConfig = {
     startingBlock: GENESIS,
     extractors: [
-        // ...makeRawLogExtractors(cdpManagers),
+        ...makeRawLogExtractors(cdpManagers),
         ...makeRawLogExtractors(cats),
         ...makeRawLogExtractors(dogs),
         ...makeRawLogExtractors([vat]),
@@ -209,8 +209,8 @@ export const config: UserProvidedSpockConfig = {
         ...makeRawEventExtractorBasedOnTopicIgnoreConflicts(oracle),
     ],
     transformers: [
-        // ...openCdpTransformer(cdpManagers, { getUrnForCdp }),
-        // ...managerGiveTransformer(cdpManagers),
+        ...openCdpTransformer(cdpManagers, { getUrnForCdp }),
+        ...managerGiveTransformer(cdpManagers),
         ...catTransformer(cats),
         ...auctionTransformer(cats, { getIlkInfo }),
         ...dogTransformer(dogs),
@@ -237,8 +237,8 @@ export const config: UserProvidedSpockConfig = {
         // }),
         // ...exchangeTransformer(exchange),
         ...oraclesTransformer(oracles),
-        // eventEnhancerTransformer(vat, dogs[0], cdpManagers, oraclesTransformers),
-        // eventEnhancerTransformerEthPrice(vat, dogs[0], cdpManagers, oraclesTransformers),
+        eventEnhancerTransformer(vat, dogs[0], cdpManagers, oraclesTransformers),
+        eventEnhancerTransformerEthPrice(vat, dogs[0], cdpManagers, oraclesTransformers),
         // multiplyHistoryTransformer(vat.address, {
         //     dogs,
         //     multiplyProxyActionsAddress: [...multiply, ...guni],
