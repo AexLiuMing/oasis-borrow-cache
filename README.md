@@ -16,7 +16,7 @@ Oasis Borrow. To build most up to date live data project utilizes
 Requirements:
 
 - Docker
-- node.js (version 12.\*)
+- node.js (version 12.13)
 - yarn
 
 1. Clone the repository

@@ -1,0 +1,60 @@
+version: "3.2"
+services:
+  # Building Image
+  constdao-cache:
+    build: .
+    image: constdao-cache
+
+    # Setting up DB
+  CACHE_DB:
+    image: postgres:10.6
+    container_name: cache_db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_HOST=http://192.168.21.186:8545
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=database
+    ports:
+      - "7863:5432"
+    networks:
+      - const_cache_network
+    restart: unless-stopped
+    depends_on:
+      - constdao-cache
+  # Setting up ETL service
+  CACHE_ETL:
+    container_name: cache_etl
+    image: constdao-cache
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: bash -c "yarn migrate && yarn start-etl"
+    network_mode: host
+    # networks:
+    # - constdao_cache_network
+    depends_on:
+      - CACHE_DB
+  # Setting up API service
+
+  CACHE_API:
+    container_name: cache_api
+    image: constdao-cache
+    command: bash -c "yarn start-api"
+    expose:
+      - 3001
+      # ports:
+      # - "3001:3001"
+    network_mode: host
+    env_file:
+      - .env
+    restart: unless-stopped
+    # networks:
+    # - constdao_cache_network
+    depends_on:
+      - CACHE_ETL
+
+networks:
+  const_cache_network:
+    name: const_cache_network
+    driver: bridge
