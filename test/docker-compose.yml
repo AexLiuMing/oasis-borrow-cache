@@ -56,5 +56,6 @@ services:
 
 networks:
   const_cache_network:
-    name: const_cache_network
+    external:
+      name: const_cache_network
     driver: bridge
